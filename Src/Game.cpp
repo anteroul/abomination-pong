@@ -4,8 +4,7 @@
 
 #include "Game.h"
 #include "TextureManager.h"
-
-SDL_Texture* playerTex;
+#include "GameObject.h"
 
 Game::Game() {
 
@@ -20,8 +19,6 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
     SDL_Init(SDL_INIT_EVERYTHING);
 
     int flags = 0;
-
-    playerTex = TextureManager::LoadTexture("Assets/player.png", renderer);
 
     if (fullscreen)
     {
@@ -57,7 +54,6 @@ void Game::update() {
 
 void Game::render() {
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, playerTex, NULL, NULL);
     SDL_RenderPresent(renderer);
 }
 
