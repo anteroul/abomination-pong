@@ -2,7 +2,8 @@
 // Created by valiant on 4.10.2021.
 //
 
-#include "game.h"
+#include "Game.h"
+#include "TextureManager.h"
 
 SDL_Texture* playerTex;
 
@@ -45,9 +46,8 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
         printf("Fatal error!\n");
         windowShouldClose = true;
     }
-    SDL_Surface* tmpSurface = IMG_Load("Assets/player.png");
-    playerTex = SDL_CreateTextureFromSurface(renderer, tmpSurface);
-    SDL_FreeSurface(tmpSurface);
+
+    playerTex = TextureManager::LoadTexture("Assets/player.png", renderer);
 }
 
 void Game::update() {

@@ -1,7 +1,7 @@
 // v0.0.1.5
 
 #include "SDL.h"
-#include "game.h"
+#include "Game.h"
 
 Game* game = nullptr;
 
