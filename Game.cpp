@@ -16,9 +16,12 @@ Game::~Game() {
 }
 
 void Game::init(const char *title, int xPos, int yPos, int width, int height, bool fullscreen) {
+
     SDL_Init(SDL_INIT_EVERYTHING);
 
     int flags = 0;
+
+    playerTex = TextureManager::LoadTexture("Assets/player.png", renderer);
 
     if (fullscreen)
     {
@@ -46,8 +49,6 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
         printf("Fatal error!\n");
         windowShouldClose = true;
     }
-
-    playerTex = TextureManager::LoadTexture("Assets/player.png", renderer);
 }
 
 void Game::update() {

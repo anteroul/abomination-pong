@@ -6,6 +6,7 @@
 #define SIGMAENGINE_TEXTUREMANAGER_H
 #include "SDL.h"
 #include "SDL_image.h"
+#include "iostream"
 
 class TextureManager {
 public:
