@@ -1,4 +1,4 @@
-// v0.0.3.1
+// v0.0.3.2
 
 #include "SDL.h"
 #include "Game.h"
@@ -17,6 +17,7 @@ int main(int argc, char* argv[]) {
 
     game->init("Pong", 400, 200, 800, 600, false);
 
+    // Game loop:
     while (!game->windowShouldClose)
     {
         frameStart = SDL_GetTicks();

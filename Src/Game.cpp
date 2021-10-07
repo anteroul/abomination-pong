@@ -6,17 +6,17 @@
 #include "structs.h"
 #include "TextureManager.h"
 
+// Global variables:
 GameObject player;
 GameObject opponent;
 GameObject ball;
+SDL_Texture* backgroundTexture = nullptr;
+SDL_Rect screenRect;
 
-Game::Game() {
 
-}
+Game::Game() = default;
 
-Game::~Game() {
-
-}
+Game::~Game() = default;
 
 void Game::init(const char *title, int xPos, int yPos, int width, int height, bool fullscreen) {
 
@@ -54,6 +54,8 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
 
     // Init values:
 
+    screenRect = {0, 0, width, height};
+
     player.r.x = 100;
     player.r.y = height / 2 - 20;
     player.r.w = 20;
@@ -68,6 +70,8 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
     ball.r.y = height / 2;
     ball.r.w = 20;
     ball.r.h = 20;
+
+    backgroundTexture = TextureManager::LoadTexture("Assets/background.png", renderer);
 }
 
 void Game::update() {
@@ -76,6 +80,10 @@ void Game::update() {
 
 void Game::render() {
     SDL_RenderClear(renderer);
+
+    // Draw Background
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderCopy(renderer, backgroundTexture, NULL, &screenRect);
 
     // Draw Player
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
@@ -89,13 +97,11 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderFillRect(renderer, &ball.r);
 
-    // Draw Background
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-
     SDL_RenderPresent(renderer);
 }
 
 void Game::clean() {
+    SDL_DestroyTexture(backgroundTexture);
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     printf("Game cleaned.\n");

@@ -16,10 +16,10 @@ public:
     void render();
     void clean();
     void handleEvents();
-    bool windowShouldClose;
+    bool windowShouldClose{};
 private:
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    SDL_Window* window{};
+    SDL_Renderer* renderer{};
 };
 
 
