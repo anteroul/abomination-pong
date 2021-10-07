@@ -15,11 +15,7 @@ int main(int argc, char* argv[]) {
 
     game = new Game();
 
-<<<<<<< HEAD
-    game->init("Sigma Engine", 2400, 200, 1280, 720, false);
-=======
     game->init("Sigma Engine", NULL, NULL, 1980, 1080, true);
->>>>>>> resolution changed
 
     while (!game->windowShouldClose)
     {
