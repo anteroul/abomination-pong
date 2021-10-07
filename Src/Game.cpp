@@ -5,8 +5,12 @@
 #include "Game.h"
 #include "structs.h"
 #include "TextureManager.h"
+#include "GameManager.h"
 
 // Global variables:
+bool pause, ballDirection;
+int playerOneScore, playerTwoScore, verticalSpeed, horizontalSpeed;
+
 GameObject player;
 GameObject opponent;
 GameObject ball;
@@ -72,9 +76,63 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
     ball.r.h = 20;
 
     backgroundTexture = TextureManager::LoadTexture("Assets/background.png", renderer);
+
+    verticalSpeed = 5;
+    horizontalSpeed = 5;
+    playerOneScore = 0;
+    playerTwoScore = 0;
+    pause = true;
+
 }
 
 void Game::update() {
+
+    // Game logic:
+    if(!pause)
+    {
+        if(!ballDirection)
+        {
+            ball.r.x -= horizontalSpeed;
+            ball.r.y -= verticalSpeed;
+        }
+        else
+        {
+            ball.r.x += horizontalSpeed;
+            ball.r.y += verticalSpeed;
+        }
+
+        if(ball.r.y < 0)
+            verticalSpeed *= -1;
+        if(ball.r.y > screenRect.h - 20)
+            verticalSpeed *= -1;
+
+        if(ball.r.x < 0) {
+            ball.r.x = screenRect.w / 2;
+            ball.r.y = screenRect.h / 2;
+            playerTwoScore++;
+            printf("P2: %d\n" ,playerTwoScore);
+            printf("P1: %d\n" ,playerOneScore);
+            pause = true;
+        }
+        if(ball.r.x > screenRect.w) {
+            ball.r.x = screenRect.w / 2;
+            ball.r.y = screenRect.h / 2;
+            playerOneScore++;
+            printf("P2: %d\n" ,playerTwoScore);
+            printf("P1: %d\n" ,playerOneScore);
+            pause = true;
+        }
+
+        /*
+         * TODO: Implement collision logic
+         */
+
+
+    } else {
+        player.r.y = screenRect.h / 2 - 20;
+        opponent.r.y = screenRect.h / 2 - 20;
+    }
+
     render();
 }
 
@@ -83,7 +141,7 @@ void Game::render() {
 
     // Draw Background
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-    SDL_RenderCopy(renderer, backgroundTexture, NULL, &screenRect);
+    SDL_RenderCopy(renderer, backgroundTexture, nullptr, &screenRect);
 
     // Draw Player
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
@@ -117,6 +175,13 @@ void Game::handleEvents() {
     {
         case SDL_QUIT:
             windowShouldClose = true;
+            break;
+        case SDL_KEYDOWN:
+            if(pause)
+            {
+                ballDirection = GameManager::SetDirection();
+                pause = false;
+            }
             break;
         default:
             break;

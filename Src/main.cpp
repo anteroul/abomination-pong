@@ -1,4 +1,4 @@
-// v0.0.3.2
+// v0.0.3.3
 
 #include "SDL.h"
 #include "Game.h"
@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 
     game = new Game();
 
-    game->init("Pong", 400, 200, 800, 600, false);
+    game->init("Pong", 400, 200, 1280, 720, false);
 
     // Game loop:
     while (!game->windowShouldClose)
