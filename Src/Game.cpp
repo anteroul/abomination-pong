@@ -55,12 +55,12 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
     // Init values:
 
     player.r.x = 100;
-    player.r.y = height / 2;
+    player.r.y = height / 2 - 20;
     player.r.w = 20;
     player.r.h = 80;
 
     opponent.r.x = width - 100;
-    opponent.r.y = height / 2;
+    opponent.r.y = height / 2 - 20;
     opponent.r.w = 20;
     opponent.r.h = 80;
 
