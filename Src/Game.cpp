@@ -3,8 +3,12 @@
 //
 
 #include "Game.h"
+#include "structs.h"
 #include "TextureManager.h"
-#include "GameObject.h"
+
+GameObject player;
+GameObject opponent;
+GameObject ball;
 
 Game::Game() {
 
@@ -46,6 +50,24 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
         printf("Fatal error!\n");
         windowShouldClose = true;
     }
+
+
+    // Init values:
+
+    player.r.x = 100;
+    player.r.y = height / 2;
+    player.r.w = 20;
+    player.r.h = 80;
+
+    opponent.r.x = width - 100;
+    opponent.r.y = height / 2;
+    opponent.r.w = 20;
+    opponent.r.h = 80;
+
+    ball.r.x = width / 2;
+    ball.r.y = height / 2;
+    ball.r.w = 20;
+    ball.r.h = 20;
 }
 
 void Game::update() {
@@ -54,6 +76,22 @@ void Game::update() {
 
 void Game::render() {
     SDL_RenderClear(renderer);
+
+    // Draw Player
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    SDL_RenderFillRect(renderer, &player.r);
+
+    // Draw Opponent
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &opponent.r);
+
+    // Draw Ball
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderFillRect(renderer, &ball.r);
+
+    // Draw Background
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+
     SDL_RenderPresent(renderer);
 }
 
@@ -64,6 +102,9 @@ void Game::clean() {
 }
 
 void Game::handleEvents() {
+
+    const Uint8 *state = SDL_GetKeyboardState(nullptr);
+
     SDL_Event event;
     SDL_PollEvent(&event);
     switch (event.type)
@@ -75,7 +116,10 @@ void Game::handleEvents() {
             break;
     }
 
-    // TODO: Controls
+    if(state[SDL_SCANCODE_UP])
+        player.r.y -= 10;
+    if(state[SDL_SCANCODE_DOWN])
+        player.r.y += 10;
 
     if (event.key.keysym.sym == SDLK_ESCAPE)
     {

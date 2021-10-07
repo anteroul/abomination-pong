@@ -1,4 +1,4 @@
-// v0.0.2
+// v0.0.3
 
 #include "SDL.h"
 #include "Game.h"
@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 
     game = new Game();
 
-    game->init("Sigma Engine", NULL, NULL, 1980, 1080, true);
+    game->init("Sigma Engine", 400, 400, 800, 600, false);
 
     while (!game->windowShouldClose)
     {
