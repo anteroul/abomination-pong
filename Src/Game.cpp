@@ -126,22 +126,25 @@ void Game::update() {
         // TODO: Implement a more advanced collision logic
         // TODO: Improve opponent AI
 
-        if(horizontalSpeed < 0) {
-            if (ball.r.y > opponent.r.y)
-                opponent.r.y += 5;
-            else
-                opponent.r.y -= 5;
-        }
+        if (ball.r.y > opponent.r.y)
+            opponent.r.y += 5;
+        else
+            opponent.r.y -= 5;
 
-        if (ball.r.x == player.r.x + player.r.w && ball.r.y >= player.r.y - 40 && ball.r.y <= player.r.y + 100)
+        if (ball.r.x == player.r.x + player.r.w && ball.r.y >= player.r.y - 20 && ball.r.y <= player.r.y + 100)
         {
             horizontalSpeed *= -1;
         }
 
-        if (ball.r.x == opponent.r.x - opponent.r.w && ball.r.y >= opponent.r.y - 40 && ball.r.y <= opponent.r.y + 100)
+        if (ball.r.x == opponent.r.x - opponent.r.w && ball.r.y >= opponent.r.y - 20 && ball.r.y <= opponent.r.y + 100)
         {
             horizontalSpeed *= -1;
         }
+
+        if(player.r.y < 0)
+            player.r.y = 0;
+        if(player.r.y + player.r.h > screenRect.h)
+            player.r.y = screenRect.h - player.r.h;
 
 
     } else {
