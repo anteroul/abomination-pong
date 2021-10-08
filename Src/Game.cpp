@@ -106,7 +106,7 @@ void Game::update() {
         if(ball.r.y > screenRect.h - 20)
             verticalSpeed *= -1;
 
-        if(ball.r.x < 0) {
+        if(ball.r.x < -20) {
             ball.r.x = screenRect.w / 2;
             ball.r.y = screenRect.h / 2;
             playerTwoScore++;
@@ -123,9 +123,23 @@ void Game::update() {
             pause = true;
         }
 
-        /*
-         * TODO: Implement collision logic
-         */
+        // TODO: Implement a more advanced collision logic
+        // TODO: Improve opponent AI
+
+        if(ball.r.y > opponent.r.y)
+            opponent.r.y += 5;
+        else
+            opponent.r.y -= 5;
+
+        if (ball.r.x == player.r.x + player.r.w && ball.r.y >= player.r.y - 40 && ball.r.y <= player.r.y + 100)
+        {
+            horizontalSpeed *= -1;
+        }
+
+        if (ball.r.x == opponent.r.x - opponent.r.w && ball.r.y >= opponent.r.y - 40 && ball.r.y <= opponent.r.y + 100)
+        {
+            horizontalSpeed *= -1;
+        }
 
 
     } else {
