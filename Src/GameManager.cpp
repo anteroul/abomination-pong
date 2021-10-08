@@ -14,9 +14,3 @@ bool GameManager::SetDirection() {
     else
         return true;
 }
-
-float GameManager::CalcAngle(float y1, float y2, int height) {
-    float rely = y1 + height / 2 - y2;
-    rely /= height / 2.0;   // Normalise
-    return rely * MAX_ANGLE;
-}

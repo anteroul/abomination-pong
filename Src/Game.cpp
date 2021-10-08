@@ -126,10 +126,12 @@ void Game::update() {
         // TODO: Implement a more advanced collision logic
         // TODO: Improve opponent AI
 
-        if(ball.r.y > opponent.r.y)
-            opponent.r.y += 5;
-        else
-            opponent.r.y -= 5;
+        if(horizontalSpeed < 0) {
+            if (ball.r.y > opponent.r.y)
+                opponent.r.y += 5;
+            else
+                opponent.r.y -= 5;
+        }
 
         if (ball.r.x == player.r.x + player.r.w && ball.r.y >= player.r.y - 40 && ball.r.y <= player.r.y + 100)
         {

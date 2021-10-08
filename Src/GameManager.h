@@ -10,7 +10,6 @@
 class GameManager {
 public:
     static bool SetDirection();
-    static float CalcAngle(float y1, float y2, int height);
 };
 
 
