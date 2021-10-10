@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 
     game = new Game();
 
-    game->init("Pong", 400, 200, 1920, 1080, true);
+    game->init("Pong", 400, 200, 1280, 720, false);
 
     // Game loop:
     while (!game->windowShouldClose)

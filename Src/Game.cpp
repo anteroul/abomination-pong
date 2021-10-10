@@ -11,8 +11,8 @@
 bool pause, ballDirection;
 int playerOneScore, playerTwoScore;
 
-Racket player;
-Racket opponent;
+Racket p1;
+Racket p2;
 Ball ball;
 SDL_Texture *backgroundTexture = nullptr;
 SDL_Rect screenRect;
@@ -55,19 +55,19 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
 
     screenRect = {0, 0, width, height};
 
-    player.pos.x = 100;
-    player.pos.y = height / 2 - 20;
-    player.r.x = player.pos.x;
-    player.r.y = player.pos.y;
-    player.r.w = 20;
-    player.r.h = 80;
+    p1.pos.x = 100;
+    p1.pos.y = height / 2 - 20;
+    p1.r.x = p1.pos.x;
+    p1.r.y = p1.pos.y;
+    p1.r.w = 20;
+    p1.r.h = 80;
 
-    opponent.pos.x = width - 100;
-    opponent.pos.y = height / 2 - 20;
-    opponent.r.x = opponent.pos.x;
-    opponent.r.y = opponent.pos.y;
-    opponent.r.w = 20;
-    opponent.r.h = 80;
+    p2.pos.x = width - 100;
+    p2.pos.y = height / 2 - 20;
+    p2.r.x = p2.pos.x;
+    p2.r.y = p2.pos.y;
+    p2.r.w = 20;
+    p2.r.h = 80;
 
     ball.speed = {10, 5};
     ball.r.x = width / 2;
@@ -124,41 +124,44 @@ void Game::update() {
         // AI (disabled):
 
         /*
-        if (ball.r.y > opponent.r.y)
-            opponent.pos.y += 7;
+        if (ball.r.y > p2.r.y)
+            p2.pos.y += 7;
         else
-            opponent.pos.y -= 7;
+            p2.pos.y -= 7;
         */
 
         // Ball collision with players:
-        if (ball.r.x == player.r.x + player.r.w && ball.r.y >= player.r.y - 20 && ball.r.y <= player.r.y + 100) {
+        if (ball.r.x == p1.r.x + p1.r.w && ball.r.y >= p1.r.y - 20 && ball.r.y <= p1.r.y + 100) {
             ball.speed.x *= -1;
-            ball.speed.y = (ball.r.y - player.pos.y) / (player.r.h / 2) * 5;
+            ball.speed.y = (ball.r.y - p1.pos.y) / (p1.r.h / 2) * 5;
         }
 
-        if (ball.r.x == opponent.r.x - opponent.r.w && ball.r.y >= opponent.r.y - 20 && ball.r.y <= opponent.r.y + 100) {
+        if (ball.r.x == p2.r.x - p2.r.w && ball.r.y >= p2.r.y - 20 && ball.r.y <= p2.r.y + 100) {
             ball.speed.x *= -1;
-            ball.speed.y = (ball.r.y - opponent.pos.y) / (opponent.r.h / 2) * 5;
+            ball.speed.y = (ball.r.y - p2.pos.y) / (p2.r.h / 2) * 5;
         }
 
-        if (player.pos.y < 0)
-            player.pos.y = 0;
-        if (player.pos.y + player.r.h > screenRect.h)
-            player.pos.y = screenRect.h - player.r.h;
+        if (p1.pos.y < 0)
+            p1.pos.y = 0;
+        if (p1.pos.y + p1.r.h > screenRect.h)
+            p1.pos.y = screenRect.h - p1.r.h;
 
-        if (opponent.pos.y < 0)
-            opponent.pos.y = 0;
-        if (opponent.pos.y + opponent.r.h > screenRect.h)
-            opponent.pos.y = screenRect.h - opponent.r.h;
+        if (p2.pos.y < 0)
+            p2.pos.y = 0;
+        if (p2.pos.y + p2.r.h > screenRect.h)
+            p2.pos.y = screenRect.h - p2.r.h;
 
 
     } else {
-        player.pos.y = screenRect.h / 2 - 20;
-        opponent.pos.y = screenRect.h / 2 - 20;
+        p1.pos.y = screenRect.h / 2 - 20;
+        p2.pos.y = screenRect.h / 2 - 20;
+        ball.speed = {10, 5};
     }
 
-    opponent.r.x = opponent.pos.x;
-    opponent.r.y = opponent.pos.y;
+    p1.r.x = p1.pos.x;
+    p1.r.y = p1.pos.y;
+    p2.r.x = p2.pos.x;
+    p2.r.y = p2.pos.y;
 
     render();
 }
@@ -172,11 +175,11 @@ void Game::render() {
 
     // Draw Player
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-    SDL_RenderFillRect(renderer, &player.r);
+    SDL_RenderFillRect(renderer, &p1.r);
 
     // Draw Opponent
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderFillRect(renderer, &opponent.r);
+    SDL_RenderFillRect(renderer, &p2.r);
 
     // Draw Ball
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -213,13 +216,13 @@ void Game::handleEvents() {
     }
 
     if (state[SDL_SCANCODE_UP])
-        opponent.r.y = opponent.pos.y -= 10;
+        p2.r.y = p2.pos.y -= 10;
     if (state[SDL_SCANCODE_DOWN])
-        opponent.r.y = opponent.pos.y += 10;
+        p2.r.y = p2.pos.y += 10;
     if (state[SDL_SCANCODE_W])
-        player.r.y = player.pos.y -= 10;
+        p1.r.y = p1.pos.y -= 10;
     if (state[SDL_SCANCODE_S])
-        player.r.y = player.pos.y += 10;
+        p1.r.y = p1.pos.y += 10;
 
     if (event.key.keysym.sym == SDLK_ESCAPE) {
         windowShouldClose = true;
