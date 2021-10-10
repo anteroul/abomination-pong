@@ -69,7 +69,7 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
     opponent.r.w = 20;
     opponent.r.h = 80;
 
-    ball.speed = {5, 5};
+    ball.speed = {10, 5};
     ball.r.x = width / 2;
     ball.r.y = height / 2;
     ball.r.w = 20;
@@ -133,19 +133,23 @@ void Game::update() {
         // Ball collision with players:
         if (ball.r.x == player.r.x + player.r.w && ball.r.y >= player.r.y - 20 && ball.r.y <= player.r.y + 100) {
             ball.speed.x *= -1;
-            ball.speed.y = (ball.r.x - player.pos.x) / (player.r.w / 2) * 5;
+            ball.speed.y = (ball.r.y - player.pos.y) / (player.r.h / 2) * 5;
         }
 
-        if (ball.r.x == opponent.r.x - opponent.r.w && ball.r.y >= opponent.r.y - 20 &&
-            ball.r.y <= opponent.r.y + 100) {
+        if (ball.r.x == opponent.r.x - opponent.r.w && ball.r.y >= opponent.r.y - 20 && ball.r.y <= opponent.r.y + 100) {
             ball.speed.x *= -1;
-            ball.speed.y = (ball.r.x - opponent.pos.x) / (opponent.r.w / 2) * 5;
+            ball.speed.y = (ball.r.y - opponent.pos.y) / (opponent.r.h / 2) * 5;
         }
 
         if (player.pos.y < 0)
             player.pos.y = 0;
         if (player.pos.y + player.r.h > screenRect.h)
             player.pos.y = screenRect.h - player.r.h;
+
+        if (opponent.pos.y < 0)
+            opponent.pos.y = 0;
+        if (opponent.pos.y + opponent.r.h > screenRect.h)
+            opponent.pos.y = screenRect.h - opponent.r.h;
 
 
     } else {
