@@ -133,12 +133,12 @@ void Game::update() {
         // Ball collision with players:
         if (ball.r.x == p1.r.x + p1.r.w && ball.r.y >= p1.r.y - 20 && ball.r.y <= p1.r.y + 100) {
             ball.speed.x *= -1;
-            ball.speed.y = (ball.r.y - p1.pos.y) / (p1.r.h / 2) * 5;
+            ball.speed.y = (ball.r.y - p1.pos.y + 60) / (p1.r.h / 2) * 3;
         }
 
         if (ball.r.x == p2.r.x - p2.r.w && ball.r.y >= p2.r.y - 20 && ball.r.y <= p2.r.y + 100) {
             ball.speed.x *= -1;
-            ball.speed.y = (ball.r.y - p2.pos.y) / (p2.r.h / 2) * 5;
+            ball.speed.y = (ball.r.y - p2.pos.y + 60) / (p2.r.h / 2) * 3;
         }
 
         if (p1.pos.y < 0)
@@ -207,8 +207,10 @@ void Game::handleEvents() {
             break;
         case SDL_KEYDOWN:
             if (pause) {
-                ballDirection = GameManager::SetDirection();
-                pause = false;
+                if (state[SDL_SCANCODE_SPACE]) {
+                    ballDirection = GameManager::SetDirection();
+                    pause = false;
+                }
             }
             break;
         default:
