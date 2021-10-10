@@ -8,5 +8,11 @@
 #endif //SIGMAENGINE_STRUCTS_H
 
 typedef struct {
+    SDL_Point pos;
     SDL_Rect r;
-} GameObject;
+} Racket;
+
+typedef struct {
+    SDL_Point speed;
+    SDL_Rect r;
+} Ball;

@@ -9,12 +9,12 @@
 
 // Global variables:
 bool pause, ballDirection;
-int playerOneScore, playerTwoScore, verticalSpeed, horizontalSpeed;
+int playerOneScore, playerTwoScore;
 
-GameObject player;
-GameObject opponent;
-GameObject ball;
-SDL_Texture* backgroundTexture = nullptr;
+Racket player;
+Racket opponent;
+Ball ball;
+SDL_Texture *backgroundTexture = nullptr;
 SDL_Rect screenRect;
 
 
@@ -28,29 +28,24 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
 
     int flags = 0;
 
-    if (fullscreen)
-    {
+    if (fullscreen) {
         flags = SDL_WINDOW_FULLSCREEN;
     }
-    if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
-    {
+    if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         window = SDL_CreateWindow(title, xPos, yPos, width, height, flags);
 
-        if (window)
-        {
+        if (window) {
             printf("SDL window created.\n");
         }
 
         renderer = SDL_CreateRenderer(window, -1, 0);
 
-        if (renderer)
-        {
+        if (renderer) {
             SDL_SetRenderDrawColor(renderer, 0, 0, 25, 255);
             printf("Renderer initialized.\n");
         }
         windowShouldClose = false;
-    }
-    else {
+    } else {
         printf("Fatal error!\n");
         windowShouldClose = true;
     }
@@ -60,16 +55,21 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
 
     screenRect = {0, 0, width, height};
 
-    player.r.x = 100;
-    player.r.y = height / 2 - 20;
+    player.pos.x = 100;
+    player.pos.y = height / 2 - 20;
+    player.r.x = player.pos.x;
+    player.r.y = player.pos.y;
     player.r.w = 20;
     player.r.h = 80;
 
-    opponent.r.x = width - 100;
-    opponent.r.y = height / 2 - 20;
+    opponent.pos.x = width - 100;
+    opponent.pos.y = height / 2 - 20;
+    opponent.r.x = opponent.pos.x;
+    opponent.r.y = opponent.pos.y;
     opponent.r.w = 20;
     opponent.r.h = 80;
 
+    ball.speed = {5, 5};
     ball.r.x = width / 2;
     ball.r.y = height / 2;
     ball.r.w = 20;
@@ -77,8 +77,6 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
 
     backgroundTexture = TextureManager::LoadTexture("Assets/background.png", renderer);
 
-    verticalSpeed = 5;
-    horizontalSpeed = 5;
     playerOneScore = 0;
     playerTwoScore = 0;
     pause = true;
@@ -88,69 +86,75 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
 void Game::update() {
 
     // Game logic:
-    if(!pause)
-    {
-        if(!ballDirection)
-        {
-            ball.r.x -= horizontalSpeed;
-            ball.r.y -= verticalSpeed;
-        }
-        else
-        {
-            ball.r.x += horizontalSpeed;
-            ball.r.y += verticalSpeed;
+    if (!pause) {
+        if (!ballDirection) {
+            ball.r.x -= ball.speed.x;
+            ball.r.y -= ball.speed.y;
+        } else {
+            ball.r.x += ball.speed.x;
+            ball.r.y += ball.speed.y;
         }
 
-        if(ball.r.y < 0)
-            verticalSpeed *= -1;
-        if(ball.r.y > screenRect.h - 20)
-            verticalSpeed *= -1;
+        // Ball collision with walls:
+        if (ball.r.y < 0)
+            ball.speed.y *= -1;
+        if (ball.r.y > screenRect.h - 20)
+            ball.speed.y *= -1;
 
-        if(ball.r.x < -20) {
+        // Score logic:
+        if (ball.r.x < -20) {
             ball.r.x = screenRect.w / 2;
             ball.r.y = screenRect.h / 2;
             playerTwoScore++;
-            printf("P2: %d\n" ,playerTwoScore);
-            printf("P1: %d\n" ,playerOneScore);
+            printf("P2: %d\n", playerTwoScore);
+            printf("P1: %d\n", playerOneScore);
             pause = true;
         }
-        if(ball.r.x > screenRect.w) {
+        if (ball.r.x > screenRect.w) {
             ball.r.x = screenRect.w / 2;
             ball.r.y = screenRect.h / 2;
             playerOneScore++;
-            printf("P2: %d\n" ,playerTwoScore);
-            printf("P1: %d\n" ,playerOneScore);
+            printf("P2: %d\n", playerTwoScore);
+            printf("P1: %d\n", playerOneScore);
             pause = true;
         }
 
-        // TODO: Implement a more advanced collision logic
         // TODO: Improve opponent AI
 
+        // AI (disabled):
+
+        /*
         if (ball.r.y > opponent.r.y)
-            opponent.r.y += 5;
+            opponent.pos.y += 7;
         else
-            opponent.r.y -= 5;
+            opponent.pos.y -= 7;
+        */
 
-        if (ball.r.x == player.r.x + player.r.w && ball.r.y >= player.r.y - 20 && ball.r.y <= player.r.y + 100)
-        {
-            horizontalSpeed *= -1;
+        // Ball collision with players:
+        if (ball.r.x == player.r.x + player.r.w && ball.r.y >= player.r.y - 20 && ball.r.y <= player.r.y + 100) {
+            ball.speed.x *= -1;
+            ball.speed.y = (ball.r.x - player.pos.x) / (player.r.w / 2) * 5;
         }
 
-        if (ball.r.x == opponent.r.x - opponent.r.w && ball.r.y >= opponent.r.y - 20 && ball.r.y <= opponent.r.y + 100)
-        {
-            horizontalSpeed *= -1;
+        if (ball.r.x == opponent.r.x - opponent.r.w && ball.r.y >= opponent.r.y - 20 &&
+            ball.r.y <= opponent.r.y + 100) {
+            ball.speed.x *= -1;
+            ball.speed.y = (ball.r.x - opponent.pos.x) / (opponent.r.w / 2) * 5;
         }
 
-        if(player.r.y < 0)
-            player.r.y = 0;
-        if(player.r.y + player.r.h > screenRect.h)
-            player.r.y = screenRect.h - player.r.h;
+        if (player.pos.y < 0)
+            player.pos.y = 0;
+        if (player.pos.y + player.r.h > screenRect.h)
+            player.pos.y = screenRect.h - player.r.h;
 
 
     } else {
-        player.r.y = screenRect.h / 2 - 20;
-        opponent.r.y = screenRect.h / 2 - 20;
+        player.pos.y = screenRect.h / 2 - 20;
+        opponent.pos.y = screenRect.h / 2 - 20;
     }
+
+    opponent.r.x = opponent.pos.x;
+    opponent.r.y = opponent.pos.y;
 
     render();
 }
@@ -190,14 +194,12 @@ void Game::handleEvents() {
 
     SDL_Event event;
     SDL_PollEvent(&event);
-    switch (event.type)
-    {
+    switch (event.type) {
         case SDL_QUIT:
             windowShouldClose = true;
             break;
         case SDL_KEYDOWN:
-            if(pause)
-            {
+            if (pause) {
                 ballDirection = GameManager::SetDirection();
                 pause = false;
             }
@@ -206,13 +208,16 @@ void Game::handleEvents() {
             break;
     }
 
-    if(state[SDL_SCANCODE_UP])
-        player.r.y -= 10;
-    if(state[SDL_SCANCODE_DOWN])
-        player.r.y += 10;
+    if (state[SDL_SCANCODE_UP])
+        opponent.r.y = opponent.pos.y -= 10;
+    if (state[SDL_SCANCODE_DOWN])
+        opponent.r.y = opponent.pos.y += 10;
+    if (state[SDL_SCANCODE_W])
+        player.r.y = player.pos.y -= 10;
+    if (state[SDL_SCANCODE_S])
+        player.r.y = player.pos.y += 10;
 
-    if (event.key.keysym.sym == SDLK_ESCAPE)
-    {
+    if (event.key.keysym.sym == SDLK_ESCAPE) {
         windowShouldClose = true;
     }
 }
