@@ -12,5 +12,4 @@ public:
     static bool SetDirection();
 };
 
-
 #endif //SIGMAPONG_GAMEMANAGER_H

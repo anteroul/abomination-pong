@@ -3,9 +3,14 @@
 //
 
 #include "Game.h"
+#include "string"
 #include "structs.h"
 #include "TextureManager.h"
 #include "GameManager.h"
+#include "Text.h"
+
+// Enable two-player mode if set to false
+bool soloEnabled = true;
 
 // Global variables:
 bool pause, ballDirection;
@@ -14,9 +19,8 @@ int playerOneScore, playerTwoScore;
 Racket p1;
 Racket p2;
 Ball ball;
-SDL_Texture *backgroundTexture = nullptr;
 SDL_Rect screenRect;
-
+SDL_Texture *backgroundTexture = nullptr;
 
 Game::Game() = default;
 
@@ -25,6 +29,7 @@ Game::~Game() = default;
 void Game::init(const char *title, int xPos, int yPos, int width, int height, bool fullscreen) {
 
     SDL_Init(SDL_INIT_EVERYTHING);
+    TTF_Init();
 
     int flags = 0;
 
@@ -79,6 +84,7 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
 
     playerOneScore = 0;
     playerTwoScore = 0;
+
     pause = true;
 
 }
@@ -119,16 +125,14 @@ void Game::update() {
             pause = true;
         }
 
-        // TODO: Improve opponent AI
+        // AI:
+        if (soloEnabled) {
+            if (ball.r.y > p1.r.y)
+                p1.pos.y += 7;
+            else
+                p1.pos.y -= 7;
+        }
 
-        // AI (disabled):
-
-        /*
-        if (ball.r.y > p2.r.y)
-            p2.pos.y += 7;
-        else
-            p2.pos.y -= 7;
-        */
 
         // Ball collision with players:
         if (ball.r.x == p1.r.x + p1.r.w && ball.r.y >= p1.r.y - 20 && ball.r.y <= p1.r.y + 100) {
@@ -192,6 +196,7 @@ void Game::clean() {
     SDL_DestroyTexture(backgroundTexture);
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
+    TTF_Quit();
     printf("Game cleaned.\n");
 }
 
@@ -217,14 +222,18 @@ void Game::handleEvents() {
             break;
     }
 
+    // Red player controls:
     if (state[SDL_SCANCODE_UP])
         p2.r.y = p2.pos.y -= 10;
     if (state[SDL_SCANCODE_DOWN])
         p2.r.y = p2.pos.y += 10;
-    if (state[SDL_SCANCODE_W])
-        p1.r.y = p1.pos.y -= 10;
-    if (state[SDL_SCANCODE_S])
-        p1.r.y = p1.pos.y += 10;
+    // Blue player controls:
+    if(!soloEnabled) {
+        if (state[SDL_SCANCODE_W])
+            p1.r.y = p1.pos.y -= 10;
+        if (state[SDL_SCANCODE_S])
+            p1.r.y = p1.pos.y += 10;
+    }
 
     if (event.key.keysym.sym == SDLK_ESCAPE) {
         windowShouldClose = true;

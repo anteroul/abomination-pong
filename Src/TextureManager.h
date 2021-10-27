@@ -4,6 +4,7 @@
 
 #ifndef SIGMAPONG_TEXTUREMANAGER_H
 #define SIGMAPONG_TEXTUREMANAGER_H
+
 #include "SDL.h"
 #include "SDL_image.h"
 #include "iostream"
