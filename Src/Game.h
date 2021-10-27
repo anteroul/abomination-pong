@@ -2,8 +2,8 @@
 // Created by valiant on 4.10.2021.
 //
 
-#ifndef SIGMAENGINE_GAME_H
-#define SIGMAENGINE_GAME_H
+#ifndef SIGMAPONG_GAME_H
+#define SIGMAPONG_GAME_H
 #include "SDL.h"
 #include "SDL_image.h"
 
@@ -23,4 +23,4 @@ private:
 };
 
 
-#endif //SIGMAENGINE_GAME_H
+#endif //SIGMAPONG_GAME_H
