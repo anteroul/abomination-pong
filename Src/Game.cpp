@@ -7,7 +7,6 @@
 #include "structs.h"
 #include "TextureManager.h"
 #include "GameManager.h"
-#include "Text.h"
 
 // Enable two-player mode if set to false
 bool soloEnabled = true;
@@ -29,7 +28,6 @@ Game::~Game() = default;
 void Game::init(const char *title, int xPos, int yPos, int width, int height, bool fullscreen) {
 
     SDL_Init(SDL_INIT_EVERYTHING);
-    TTF_Init();
 
     int flags = 0;
 
@@ -196,7 +194,6 @@ void Game::clean() {
     SDL_DestroyTexture(backgroundTexture);
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
-    TTF_Quit();
     printf("Game cleaned.\n");
 }
 
