@@ -15,4 +15,9 @@ typedef struct {
     SDL_Rect r;
 } Ball;
 
+typedef struct {
+    SDL_Texture* sprite;
+    SDL_Point pos;
+} PowerUp;
+
 #endif //SIGMAENGINE_STRUCTS_H
