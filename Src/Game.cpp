@@ -135,12 +135,12 @@ void Game::update() {
         // Ball collision with players:
         if (ball.r.x == p1.r.x + p1.r.w && ball.r.y >= p1.r.y - 20 && ball.r.y <= p1.r.y + 100) {
             ball.speed.x *= -1;
-            ball.speed.y = (ball.r.y - p1.pos.y + 60) / (p1.r.h / 2) * 3;
+            ball.speed.y = ball.r.y / p1.r.h + 40 * 0.1f;
         }
 
         if (ball.r.x == p2.r.x - p2.r.w && ball.r.y >= p2.r.y - 20 && ball.r.y <= p2.r.y + 100) {
             ball.speed.x *= -1;
-            ball.speed.y = (ball.r.y - p2.pos.y + 60) / (p2.r.h / 2) * 3;
+            ball.speed.y = ball.r.y / p2.r.h + 40 * 0.1f;
         }
 
         if (p1.pos.y < 0)
