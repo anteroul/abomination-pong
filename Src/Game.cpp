@@ -15,7 +15,10 @@ Racket p1;
 Racket p2;
 Ball ball;
 SDL_Texture *backgroundTexture = nullptr;
-SDL_Rect screenRect;
+TTF_Font *font = nullptr;
+SDL_Rect screenRect, scoreRec1, scoreRec2;
+SDL_Texture *p1_score;
+SDL_Texture *p2_score;
 
 
 Game::Game() = default;
@@ -25,6 +28,7 @@ Game::~Game() = default;
 void Game::init(const char *title, int xPos, int yPos, int width, int height, bool fullscreen) {
 
     SDL_Init(SDL_INIT_EVERYTHING);
+	TTF_Init();
 
     int flags = 0;
 
@@ -54,6 +58,8 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
     // Init values:
 
     screenRect = {0, 0, width, height};
+	scoreRec1 = {static_cast<int>(width * 0.25), 50, 100, 200};
+	scoreRec2 = {static_cast<int>(width * 0.75), 50, 100, 200};
 
     p1.pos.x = 100;
     p1.pos.y = height / 2 - 20;
@@ -75,12 +81,19 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
     ball.r.w = 20;
     ball.r.h = 20;
 
-    backgroundTexture = TextureManager::LoadTexture("Assets/background.png", renderer);
+    backgroundTexture = TextureManager::LoadTexture("../Assets/background.png", renderer);
+
+	font = TTF_OpenFont("../Assets/Arcade.ttf", 256);
+
+	if (!font)
+		std::cout << "Failed to open font.\n";
 
     playerOneScore = 0;
     playerTwoScore = 0;
     pause = true;
 
+	p1_score = TextureManager::CreateTextureFromText(font, std::to_string(playerOneScore), {255, 255, 255, 255}, renderer);
+	p2_score = TextureManager::CreateTextureFromText(font, std::to_string(playerTwoScore), {255, 255, 255, 255}, renderer);
 }
 
 void Game::update() {
@@ -106,20 +119,16 @@ void Game::update() {
             ball.r.x = screenRect.w / 2;
             ball.r.y = screenRect.h / 2;
             playerTwoScore++;
-            printf("P2: %d\n", playerTwoScore);
-            printf("P1: %d\n", playerOneScore);
+			p2_score = TextureManager::CreateTextureFromText(font, std::to_string(playerTwoScore), {255, 255, 255, 255}, renderer);
             pause = true;
         }
         if (ball.r.x > screenRect.w) {
             ball.r.x = screenRect.w / 2;
             ball.r.y = screenRect.h / 2;
             playerOneScore++;
-            printf("P2: %d\n", playerTwoScore);
-            printf("P1: %d\n", playerOneScore);
+			p1_score = TextureManager::CreateTextureFromText(font, std::to_string(playerOneScore), {255, 255, 255, 255}, renderer);
             pause = true;
         }
-
-        // TODO: Improve opponent AI
 
         // AI (disabled):
 
@@ -185,13 +194,22 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderFillRect(renderer, &ball.r);
 
+	// Draw Scores
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_RenderCopy(renderer, p1_score, nullptr, &scoreRec1);
+	SDL_RenderCopy(renderer, p2_score, nullptr, &scoreRec2);
+
     SDL_RenderPresent(renderer);
 }
 
 void Game::clean() {
+	TTF_CloseFont(font);
+	SDL_DestroyTexture(p1_score);
+	SDL_DestroyTexture(p2_score);
     SDL_DestroyTexture(backgroundTexture);
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
+	TTF_Quit();
     printf("Game cleaned.\n");
 }
 

@@ -4,8 +4,10 @@
 
 #ifndef SIGMAENGINE_GAME_H
 #define SIGMAENGINE_GAME_H
-#include "SDL.h"
-#include "SDL_image.h"
+
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
+#include "SDL2/SDL_ttf.h"
 
 class Game {
 public:

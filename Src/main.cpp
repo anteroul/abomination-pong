@@ -1,6 +1,4 @@
-// v0.0.7
-
-#include "SDL.h"
+#include "SDL2/SDL.h"
 #include "Game.h"
 #define FPS 60
 
