@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
 
     game = new Game();
 
-    game->init("Pong", 400, 200, 1280, 720, false);
+    game->init("Pong", 400, 200, 1280, 720, false, true);
 
     // Game loop:
     while (!game->windowShouldClose)
@@ -32,6 +32,7 @@ int main(int argc, char* argv[]) {
 
     // Clean up
     game->clean();
+	delete game;
     SDL_Quit();
     return 0;
 }

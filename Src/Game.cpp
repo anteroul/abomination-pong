@@ -8,7 +8,7 @@
 #include "GameManager.h"
 
 // Global variables:
-bool pause, ballDirection;
+bool pause, ballDirection, twoPlayerModeEnabled;
 int playerOneScore, playerTwoScore;
 
 Racket p1;
@@ -25,8 +25,8 @@ Game::Game() = default;
 
 Game::~Game() = default;
 
-void Game::init(const char *title, int xPos, int yPos, int width, int height, bool fullscreen) {
-
+void Game::init(const char *title, int xPos, int yPos, int width, int height, bool fullscreen, bool twoPlayerMode)
+{
     SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
 
@@ -54,6 +54,7 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
         windowShouldClose = true;
     }
 
+	twoPlayerModeEnabled = twoPlayerMode;
 
     // Init values:
 
@@ -96,8 +97,8 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
 	p2_score = TextureManager::CreateTextureFromText(font, std::to_string(playerTwoScore), {255, 255, 255, 255}, renderer);
 }
 
-void Game::update() {
-
+void Game::update()
+{
     // Game logic:
     if (!pause) {
         if (!ballDirection) {
@@ -130,14 +131,13 @@ void Game::update() {
             pause = true;
         }
 
-        // AI (disabled):
-
-        /*
-        if (ball.r.y > p2.r.y)
-            p2.pos.y += 7;
-        else
-            p2.pos.y -= 7;
-        */
+		if (!twoPlayerModeEnabled)
+		{
+			if (ball.r.y > p2.r.y)
+				p2.pos.y += 7;
+			else
+				p2.pos.y -= 7;
+		}
 
         // Ball collision with players:
         if (ball.r.x == p1.r.x + p1.r.w && ball.r.y >= p1.r.y - 20 && ball.r.y <= p1.r.y + 100) {
@@ -175,7 +175,8 @@ void Game::update() {
     render();
 }
 
-void Game::render() {
+void Game::render()
+{
     SDL_RenderClear(renderer);
 
     // Draw Background
@@ -235,10 +236,13 @@ void Game::handleEvents() {
             break;
     }
 
-    if (state[SDL_SCANCODE_UP])
-        p2.r.y = p2.pos.y -= 10;
-    if (state[SDL_SCANCODE_DOWN])
-        p2.r.y = p2.pos.y += 10;
+	if(twoPlayerModeEnabled)
+	{
+		if (state[SDL_SCANCODE_UP])
+			p2.r.y = p2.pos.y -= 10;
+		if (state[SDL_SCANCODE_DOWN])
+			p2.r.y = p2.pos.y += 10;
+	}
     if (state[SDL_SCANCODE_W])
         p1.r.y = p1.pos.y -= 10;
     if (state[SDL_SCANCODE_S])

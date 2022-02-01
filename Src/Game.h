@@ -9,19 +9,27 @@
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_ttf.h"
 
-class Game {
+class Game
+{
 public:
-    Game();
-    ~Game();
-    void init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen);
-    void update();
-    void render();
-    void clean();
-    void handleEvents();
-    bool windowShouldClose{};
+	Game();
+
+	~Game();
+
+	void init(const char *title, int xPos, int yPos, int width, int height, bool fullscreen, bool twoPlayerMode);
+
+	void update();
+
+	void render();
+
+	void clean();
+
+	void handleEvents();
+
+	bool windowShouldClose{};
 private:
-    SDL_Window* window{};
-    SDL_Renderer* renderer{};
+	SDL_Window *window{};
+	SDL_Renderer *renderer{};
 };
 
 
