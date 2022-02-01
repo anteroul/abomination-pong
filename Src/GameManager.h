@@ -2,8 +2,8 @@
 // Created by valiant on 8.10.2021.
 //
 
-#ifndef SIGMAENGINE_GAMEMANAGER_H
-#define SIGMAENGINE_GAMEMANAGER_H
+#ifndef SIGMAPONG_GAMEMANAGER_H
+#define SIGMAPONG_GAMEMANAGER_H
 
 #include "cmath"
 
@@ -12,5 +12,4 @@ public:
     static bool SetDirection();
 };
 
-
-#endif //SIGMAENGINE_GAMEMANAGER_H
+#endif //SIGMAPONG_GAMEMANAGER_H

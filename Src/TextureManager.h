@@ -2,8 +2,9 @@
 // Created by valiant on 4.10.2021.
 //
 
-#ifndef SIGMAENGINE_TEXTUREMANAGER_H
-#define SIGMAENGINE_TEXTUREMANAGER_H
+#ifndef SIGMAPONG_TEXTUREMANAGER_H
+#define SIGMAPONG_TEXTUREMANAGER_H
+
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
@@ -16,4 +17,4 @@ public:
 };
 
 
-#endif //SIGMAENGINE_TEXTUREMANAGER_H
+#endif //SIGMAPONG_TEXTUREMANAGER_H
