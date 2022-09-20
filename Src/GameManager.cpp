@@ -9,8 +9,5 @@ const float MAX_ANGLE = 3.142 / 5.0; // 72 degrees
 bool GameManager::SetDirection() {
     int randomValue = rand() % 10 + 1;
 
-    if (randomValue <= 5)
-        return false;
-    else
-        return true;
+    return randomValue > 5;
 }

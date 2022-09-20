@@ -13,19 +13,12 @@ class Game
 {
 public:
 	Game();
-
 	~Game();
-
 	void init(const char *title, int xPos, int yPos, int width, int height, bool fullscreen, bool twoPlayerMode);
-
 	void update();
-
 	void render();
-
 	void clean();
-
 	void handleEvents();
-
 	bool windowShouldClose{};
 private:
 	SDL_Window *window{};
