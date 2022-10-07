@@ -12,7 +12,7 @@
 
 class TextureManager {
 public:
-    static SDL_Texture* LoadTexture(const char* fileName, SDL_Renderer* ren);
+	static SDL_Texture* LoadTexture(const char* fileName, SDL_Renderer* ren);
 	static SDL_Texture* CreateTextureFromText(TTF_Font* font, std::string text, SDL_Color color, SDL_Renderer *ren);
 };
 
