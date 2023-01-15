@@ -5,17 +5,17 @@
 #ifndef SIGMAENGINE_STRUCTS_H
 #define SIGMAENGINE_STRUCTS_H
 
-struct {
+struct Racket {
     SDL_Point pos;
     SDL_Rect r;
 };
 
-struct {
+struct Ball {
     SDL_Point speed;
     SDL_Rect r;
 };
 
-struct {
+struct PowerUp {
     SDL_Texture* sprite;
     SDL_Point pos;
 };
