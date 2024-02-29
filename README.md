@@ -1,4 +1,4 @@
-# SigmaPong
+# Pong in SDL2
 Pong clone written in SDL2 and C++14.
 
 ### Controls:
